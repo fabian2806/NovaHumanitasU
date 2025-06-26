@@ -65,7 +65,7 @@ fun AppButton( //Le pongo este nombre para que no haya conflictos con el Button 
     //Acá cambiamos el tamaño del texto:
     val textStyle = when (size){
         ButtonSize.SMALL -> MaterialTheme.typography.bodySmall
-        ButtonSize.MEDIUM -> MaterialTheme.typography.bodyMedium
+        ButtonSize.MEDIUM -> MaterialTheme.typography.bodyLarge
         ButtonSize.LARGE -> MaterialTheme.typography.bodyLarge
     }
 
