@@ -9,6 +9,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
@@ -54,6 +55,11 @@ fun WelcomeScreen(navController: NavController) {
                         width = 2.dp,
                         color = MaterialTheme.colorScheme.primary,
                         shape = RoundedCornerShape(8.dp)
+                    )
+                    .shadow(
+                        elevation = 4.dp,
+                        shape = RoundedCornerShape(24.dp),
+                        clip = false // deja que la sombra se expanda
                     )
             )
             Spacer(modifier = Modifier.height(32.dp))
