@@ -107,7 +107,7 @@ fun LoginScreen(navController: NavController){
             AppButton(
                 text = "Iniciar Sesión",
                 onClick = {
-                    navController.navigate("welcome")
+                    navController.navigate("home")
                 },
                 size = ButtonSize.LARGE
             )
