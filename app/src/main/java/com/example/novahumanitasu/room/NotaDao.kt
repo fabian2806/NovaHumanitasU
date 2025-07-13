@@ -17,4 +17,7 @@ interface NotaDao {
 
     @Query("DELETE FROM nota WHERE codigoCurso = :codigoCurso")
     suspend fun borrarNotasDeCurso(codigoCurso: String)
+
+    @Query("SELECT * FROM nota WHERE codigoCurso = :codigo")
+    fun obtenerNotasPorCurso(codigo: String): Flow<List<NotaEntity>>
 }

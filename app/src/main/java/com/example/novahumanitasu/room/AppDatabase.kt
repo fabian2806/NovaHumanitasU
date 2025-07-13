@@ -8,7 +8,7 @@ import com.example.novahumanitasu.model.entities.UsuarioEntity
 
 @Database(
     entities = [CursoEntity::class, UsuarioEntity::class, NotaEntity::class],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

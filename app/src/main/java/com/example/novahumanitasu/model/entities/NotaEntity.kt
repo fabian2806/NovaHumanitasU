@@ -5,7 +5,9 @@ import androidx.room.ForeignKey
 import androidx.room.ForeignKey.Companion.CASCADE
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "nota",
+@Entity(
+    tableName = "nota",
+    primaryKeys = ["codigoCurso", "evaluacion"],
     foreignKeys = [ForeignKey(
         entity = CursoEntity::class,
         parentColumns = ["codigo"],
@@ -13,7 +15,6 @@ import androidx.room.PrimaryKey
         onDelete = CASCADE
     )])
 data class NotaEntity(
-    @PrimaryKey
     val codigoCurso: String,
     val evaluacion: String, // PC1, PC2, EX1, etc.
     val nota: Int
