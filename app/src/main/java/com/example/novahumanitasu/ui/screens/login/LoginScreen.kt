@@ -14,6 +14,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,17 +28,30 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.novahumanitasu.R
 import com.example.novahumanitasu.components.AppButton
 import com.example.novahumanitasu.components.ButtonSize
 import com.example.novahumanitasu.components.LoginTextField
+import com.example.novahumanitasu.ui.viewModels.LoginViewModel
 
 @Composable
 fun LoginScreen(navController: NavController){
 
-    var username by remember { mutableStateOf("") }
+    val loginViewModel: LoginViewModel = hiltViewModel()
+    val usuarioAutenticado by loginViewModel.usuarioAutenticado.collectAsState()
+
+    var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+    LaunchedEffect(usuarioAutenticado) {
+        if (usuarioAutenticado != null) {
+            navController.navigate("home") {
+                popUpTo("login") { inclusive = true }
+            }
+        }
+    }
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -88,9 +103,9 @@ fun LoginScreen(navController: NavController){
             Spacer(modifier = Modifier.height(64.dp))
 
             LoginTextField(
-                value = username,
-                onValueChange = {username = it},
-                label = "Usuario"
+                value = email,
+                onValueChange = {email = it},
+                label = "Email"
             )
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -107,7 +122,7 @@ fun LoginScreen(navController: NavController){
             AppButton(
                 text = "Iniciar Sesión",
                 onClick = {
-                    navController.navigate("home")
+                    loginViewModel.loginUsuario(email, password)
                 },
                 size = ButtonSize.LARGE
             )
