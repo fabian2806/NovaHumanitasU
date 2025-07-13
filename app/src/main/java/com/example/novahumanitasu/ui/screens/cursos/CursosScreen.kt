@@ -9,26 +9,36 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.novahumanitasu.R
 import com.example.novahumanitasu.components.CursoCard
 import com.example.novahumanitasu.model.DataCurso
+import com.example.novahumanitasu.ui.viewModels.CursoViewModel
 
 @Composable
 fun CursosScreen(navController: NavController) {
-    // Estos datos luego se pasarán desde el ViewModel
+
+    val cursoViewModel: CursoViewModel =
+        hiltViewModel()
+    val cursos by cursoViewModel.cursos.collectAsState()
+
+
+    /* // Estos datos luego se pasarán desde el ViewModel
     val cursos = listOf(
         DataCurso("Programación 3", "INF132", "Manuel Vargas", R.drawable.foto_clase_fgm),
         DataCurso("Programación 4", "INF120", "Juan Pachas", R.drawable.foto_clase_fgm),
         DataCurso("Redes de Computadoras", "INF210", "Manuel Vargas", R.drawable.foto_clase_fgm),
         DataCurso("Programación Web", "INF675", "Mateo Vargas", R.drawable.foto_clase_fgm),
         DataCurso("Química Orgánica", "INF111", "Walter White", R.drawable.foto_clase_fgm)
-    )
+    )*/
 
     Column(
         modifier = Modifier
@@ -46,7 +56,14 @@ fun CursosScreen(navController: NavController) {
 
         LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             items(cursos) { curso ->
-                CursoCard(curso = curso, onClick = {
+                CursoCard(
+                    curso = DataCurso(
+                        nombre = curso.nombre,
+                        codigo = curso.codigo,
+                        profesor = curso.profesor, // puedes usar este campo como "profesor"
+                        imagen = R.drawable.foto_clase_fgm // imagen estática por ahora
+                    ),
+                    onClick = {
                     navController.navigate("detalleCurso/${curso.codigo}")
                 })
             }
