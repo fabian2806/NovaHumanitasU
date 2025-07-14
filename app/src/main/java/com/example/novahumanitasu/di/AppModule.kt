@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import com.example.novahumanitasu.room.AppDatabase
 import com.example.novahumanitasu.room.CursoDao
+import com.example.novahumanitasu.room.HorarioDao
+import com.example.novahumanitasu.repository.HorarioRepository
 import com.example.novahumanitasu.room.NotaDao
 import com.example.novahumanitasu.room.UsuarioDao
 import dagger.Module
@@ -35,4 +37,15 @@ class AppModule {
 
     @Provides
     fun provideNotaDao(db: AppDatabase): NotaDao = db.notaDao()
+
+    @Provides
+    fun provideHorarioDao(db: AppDatabase): HorarioDao = db.horarioDao()
+
+    @Provides
+    @Singleton
+    fun provideHorarioRepository(
+        horarioDao: HorarioDao // Hilt inyectará el HorarioDao provisto arriba
+    ): HorarioRepository {
+        return HorarioRepository(horarioDao)
+    }
 }

@@ -22,6 +22,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.novahumanitasu.ui.screens.cursos.CursosScreen
 import com.example.novahumanitasu.ui.screens.cursos.DetalleCursoScreen
+import com.example.novahumanitasu.ui.screens.horarios.HorariosScreen
+import com.example.novahumanitasu.ui.screens.notificaciones.NotificacionesScreen
+
 
 @Composable
 fun HomeLayout(navController: NavController){
@@ -88,7 +91,7 @@ fun HomeLayout(navController: NavController){
 
             //2. Calendario:
             composable(BottomNavItem.Calendar.route) {
-                HomeScreen(navController)
+                HorariosScreen(navController)
             }
 
             //3. Home:
@@ -98,7 +101,7 @@ fun HomeLayout(navController: NavController){
 
             //4. Notificaciones:
             composable(BottomNavItem.Notifications.route) {
-                HomeScreen(navController)
+                NotificacionesScreen(navController)
             }
 
             //5. Más:

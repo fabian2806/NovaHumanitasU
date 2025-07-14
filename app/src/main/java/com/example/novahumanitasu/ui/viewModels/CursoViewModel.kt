@@ -31,6 +31,14 @@ class CursoViewModel @Inject constructor(
                     imagen = R.drawable.foto_clase_fgm
                 )
             )
+            repository.insertarCurso(
+                CursoEntity(
+                    codigo = "MAT201",
+                    nombre = "Cálculo Diferencial", // Nombre del nuevo curso
+                    profesor = "Albert Einstein", // Profesor del nuevo curso
+                    imagen = R.drawable.foto_clase_fgm // Asegúrate de tener este drawable
+                )
+            )
         }
     }
 
