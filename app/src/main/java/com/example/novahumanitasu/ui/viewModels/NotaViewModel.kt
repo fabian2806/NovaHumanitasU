@@ -8,6 +8,7 @@ import com.example.novahumanitasu.repository.NotaRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,6 +20,7 @@ class NotaViewModel @Inject constructor(
 
     fun getNotasPorCurso(codigoCurso: String): StateFlow<List<NotaEntity>> {
         return repository.obtenerNotasPorCurso(codigoCurso)
+            .distinctUntilChanged()
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
     }
 

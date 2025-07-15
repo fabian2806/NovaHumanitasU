@@ -22,6 +22,8 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,21 +35,33 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.novahumanitasu.R
 import com.example.novahumanitasu.components.AnuncioCard
 import com.example.novahumanitasu.model.DataAnuncio
+import com.example.novahumanitasu.ui.viewModels.UsuarioViewModel
 
 @Composable
 fun HomeScreen(navController: NavController){
 
-    //Cambiar al implementar MVVC:
+    val usuarioViewModel: UsuarioViewModel = hiltViewModel()
+    val usuario by usuarioViewModel.usuarioActual.collectAsState()
 
-    val nombreCompleto = "Gabriela Jimena Rodriguez Mora"
+    val nombreCompleto = "${usuario?.nombres} ${usuario?.apellidos}"
+    val carrera = "${usuario?.carrera}"
+    val ciclo = "${usuario?.ciclo}"
+    val codigoNHU = "${usuario?.codigoNHU}"
+    val dni = "${usuario?.dni}"
+
+    //Cambiar al implementar MVVC:
+    /*val nombreCompleto = "Gabriela Jimena Rodriguez Mora"
     val carrera = "Ingeniería Ambiental"
     val ciclo = "2025-1"
     val codigoNHU = "20210834"
     val dni = "72849313"
+    */
 
     val anuncios = listOf(
         DataAnuncio(

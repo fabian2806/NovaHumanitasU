@@ -1,5 +1,6 @@
 package com.example.novahumanitasu.ui.screens.cursos
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -10,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,6 +25,7 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,10 +49,18 @@ import com.example.novahumanitasu.ui.viewModels.NotaViewModel
 fun CalificacionesTab(codigo: String){
 
     val notaViewModel: NotaViewModel = hiltViewModel()
-    val notas by notaViewModel.getNotasPorCurso(codigo).collectAsState()
+    val notasFlow = remember { notaViewModel.getNotasPorCurso(codigo) }
+    val notas by notasFlow.collectAsState()
     val notaFinal = remember(notas) {
         notaViewModel.obtenerNotaFinal(notas)
     }
+    //val notaFinal = 20
+
+    LaunchedEffect(Unit) {
+        Log.d("MiApp", "🚨 CalificacionesTab se recompuso")
+    }
+
+    val scrollState = rememberScrollState()
 
     /*val notas = listOf(
         DataNota("PC1", 8),
@@ -60,8 +72,9 @@ fun CalificacionesTab(codigo: String){
     )*/
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxWidth()
             .padding()
+            .verticalScroll(scrollState)
     ) {
         notas.forEach{ nota ->
             Row(
@@ -105,7 +118,7 @@ fun CalificacionesTab(codigo: String){
             horizontalArrangement = Arrangement.SpaceBetween
         ){
             Text(
-                text = "Nota Final",
+                text = "Nota Final: ${notaFinal}",
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier
@@ -116,7 +129,7 @@ fun CalificacionesTab(codigo: String){
 
         }
 
-        Text(
+        /*Text(
             text = "La nota es: $notaFinal.",  // Formatea con un decimal
             color = if (notaFinal < 10) Color.Red else Color.Black,
             fontWeight = FontWeight.ExtraBold,
@@ -125,7 +138,7 @@ fun CalificacionesTab(codigo: String){
                 .fillMaxWidth()
                 .background(Color.Green)
                 .padding(8.dp)
-        )
+        )*/
 
 
 
@@ -141,6 +154,8 @@ fun CalificacionesTab(codigo: String){
             )
             Text(text = "10", style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
 
 
 
