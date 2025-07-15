@@ -14,7 +14,7 @@ import com.example.novahumanitasu.model.entities.ReminderLogEntity
 
 @Database(
     entities = [CursoEntity::class, UsuarioEntity::class, NotaEntity::class, ReservaEntity::class, HorarioEntity::class, ReminderLogEntity::class],
-    version = 8,
+    version = 9,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

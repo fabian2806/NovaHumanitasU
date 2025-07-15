@@ -3,6 +3,7 @@ package com.example.novahumanitasu.ui.screens.home
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -150,7 +151,14 @@ fun HomeScreen(navController: NavController){
             modifier = Modifier.padding(16.dp)
         )
         anuncios.forEach { anuncio ->
-            AnuncioCard(anuncio = anuncio)
+            // Aquí es donde aplicamos el padding horizontal a cada tarjeta
+            // Esto crea el margen lateral para cada Card, y como están dentro de un Column
+            // con scroll, funcionará perfectamente.
+            Box(modifier = Modifier.padding(horizontal = 16.dp)) {
+                AnuncioCard(anuncio = anuncio)
+            }
+            // Añadimos un Spacer para el espacio vertical entre tarjetas
+            Spacer(modifier = Modifier.height(16.dp))
         }
         Spacer(modifier = Modifier.height(32.dp))
     }

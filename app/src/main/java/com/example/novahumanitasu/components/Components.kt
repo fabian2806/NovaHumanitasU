@@ -182,11 +182,12 @@ fun LoginTextField(
 @Composable
 fun AnuncioCard(anuncio: DataAnuncio){
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+        modifier = Modifier.fillMaxWidth(), // <-- ¡SIN PADDING AQUÍ!
         shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(4.dp)
+        elevation = CardDefaults.cardElevation(4.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        )
     ) {
         Row(modifier = Modifier.padding(12.dp)) {
             Image(
@@ -209,12 +210,12 @@ fun AnuncioCard(anuncio: DataAnuncio){
 @Composable
 fun CursoCard(curso: DataCurso, onClick: () -> Unit){
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() }
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-        shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(4.dp)
+        modifier = Modifier.fillMaxWidth(), // <-- ¡SIN PADDING AQUÍ!
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(4.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        )
     ) {
         Row(modifier = Modifier.padding(12.dp)) {
             Image(

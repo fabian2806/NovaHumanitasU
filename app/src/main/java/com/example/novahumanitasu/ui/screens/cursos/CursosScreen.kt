@@ -2,6 +2,7 @@ package com.example.novahumanitasu.ui.screens.cursos
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,6 +22,7 @@ import androidx.navigation.NavController
 import com.example.novahumanitasu.R
 import com.example.novahumanitasu.components.CursoCard
 import com.example.novahumanitasu.model.DataCurso
+import com.example.novahumanitasu.ui.screens.notificaciones.ReminderLogItem
 import com.example.novahumanitasu.ui.viewModels.CursoViewModel
 
 @Composable
@@ -54,7 +56,11 @@ fun CursosScreen(navController: NavController) {
                 .align(Alignment.CenterHorizontally)
         )
 
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(), // Asegura que la lista ocupe el espacio disponible
+            contentPadding = PaddingValues(horizontal = 4.dp), // Añade el padding aquí
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
             items(cursos) { curso ->
                 CursoCard(
                     curso = DataCurso(
@@ -64,9 +70,10 @@ fun CursosScreen(navController: NavController) {
                         imagen = R.drawable.foto_clase_fgm // imagen estática por ahora
                     ),
                     onClick = {
-                    navController.navigate("detalleCurso/${curso.codigo}")
-                })
+                        navController.navigate("detalleCurso/${curso.codigo}")
+                    })
             }
         }
+
     }
 }

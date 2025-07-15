@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -62,6 +63,8 @@ fun NotificacionesScreen(
             )
         } else {
             LazyColumn(
+                modifier = Modifier.fillMaxSize(), // Asegura que la lista ocupe el espacio disponible
+                contentPadding = PaddingValues(horizontal = 16.dp), // Añade el padding aquí
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(reminders, key = { it.id }) { reminder ->
@@ -81,10 +84,8 @@ fun ReminderLogItem(reminder: ReminderLogEntity) {
         ?.toString() ?: "C"
 
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        modifier = Modifier.fillMaxWidth(), // Simplemente ocupa el ancho disponible
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         shape = MaterialTheme.shapes.large,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
@@ -135,7 +136,7 @@ fun ReminderLogItem(reminder: ReminderLogEntity) {
                 }
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+
 
             /*
             Text(

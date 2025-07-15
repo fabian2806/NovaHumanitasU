@@ -1,5 +1,7 @@
 package com.example.novahumanitasu.ui.screens.home
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
@@ -26,6 +28,7 @@ import com.example.novahumanitasu.ui.screens.otros.OtrosScreen
 import com.example.novahumanitasu.ui.screens.horarios.HorariosScreen
 import com.example.novahumanitasu.ui.screens.notificaciones.NotificacionesScreen
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeLayout(navController: NavController){
     val bottomNavController = rememberNavController()

@@ -1,5 +1,7 @@
 package com.example.novahumanitasu.ui.screens.horarios
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -63,6 +65,7 @@ import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.produceState
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun HorariosScreen(
