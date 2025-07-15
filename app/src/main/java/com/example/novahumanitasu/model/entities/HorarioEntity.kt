@@ -21,5 +21,6 @@ data class HorarioEntity(
     val horaInicio: LocalTime, // Hora de inicio de la clase
     val horaFin: LocalTime,    // Hora de fin de la clase
     val tipo: String,          // Ej: "Clase", "Práctica", "Laboratorio", "Examen"
-    val salon: String          // Ej: "V304", "Lab 201"
+    val salon: String,          // Ej: "V304", "Lab 201"
+    val recordatorioActivo: Boolean = false
 )

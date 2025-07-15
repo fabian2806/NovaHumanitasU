@@ -48,4 +48,7 @@ class AppModule {
     ): HorarioRepository {
         return HorarioRepository(horarioDao)
     }
+
+
+
 }

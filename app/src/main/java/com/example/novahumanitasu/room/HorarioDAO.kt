@@ -7,6 +7,8 @@ import androidx.room.Query
 import com.example.novahumanitasu.model.entities.HorarioEntity
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
+import androidx.room.Update // <-- IMPORTA UPDATE
+
 
 @Dao
 interface HorarioDao {
@@ -26,4 +28,7 @@ interface HorarioDao {
     // Opcional: para obtener todos los horarios de un curso
     @Query("SELECT * FROM horario WHERE codigoCurso = :codigoCurso ORDER BY fecha ASC, horaInicio ASC")
     fun getHorariosPorCurso(codigoCurso: String): Flow<List<HorarioEntity>>
+
+    @Update
+    suspend fun actualizarHorario(horario: HorarioEntity)
 }

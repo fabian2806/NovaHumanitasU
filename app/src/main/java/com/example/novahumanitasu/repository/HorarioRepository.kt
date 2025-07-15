@@ -65,4 +65,8 @@ class HorarioRepository @Inject constructor(
     fun obtenerHorariosPorCurso(codigoCurso: String): Flow<List<HorarioEntity>> {
         return horarioDao.getHorariosPorCurso(codigoCurso)
     }
+
+    suspend fun actualizarHorario(horario: HorarioEntity) {
+        horarioDao.actualizarHorario(horario)
+    }
 }

@@ -49,25 +49,44 @@ class HorarioViewModel @Inject constructor(
     }
 
 
+    // --- NUEVO MÉTODO PARA ACTIVAR/DESACTIVAR EL RECORDATORIO ---
+    /**
+     * Cambia el estado booleano de 'recordatorioActivo' para un horario específico.
+     * Este método se llamará desde la UI (por ejemplo, al pulsar un Switch o un Icono).
+     * @param horario El objeto HorarioEntity que se va a actualizar en la base de datos.
+     */
+    fun toggleRecordatorio(horario: HorarioEntity) {
+        viewModelScope.launch {
+            // Usamos .copy() para crear un nuevo objeto con el valor invertido.
+            // Esto es una buena práctica de inmutabilidad y funciona perfecto con data classes.
+            val horarioActualizado = horario.copy(recordatorioActivo = !horario.recordatorioActivo)
+
+            // Llamamos al repositorio para que persista el cambio en la base de datos.
+            horarioRepository.actualizarHorario(horarioActualizado)
+
+            Log.d("HorarioViewModel", "Recordatorio para ${horario.codigoCurso} a las ${horario.horaInicio} actualizado a: ${horarioActualizado.recordatorioActivo}")
+        }
+    }
     init {
         viewModelScope.launch {
-
             // --- SOLO INSERTAR HORARIOS DE PRUEBA ---
             val today = LocalDate.now()
             val tomorrow = today.plusDays(1)
             val dayAfterTomorrow = today.plusDays(2)
-            val fechaExamenFinal = LocalDate.of(2024, Month.DECEMBER, 15) // Año, Mes (Enum), Día
-            val aaa = LocalDate.of(2025, 7, 13) // Año, Mes (Int), Día
+            val fechaExamenFinal = LocalDate.of(2024, Month.DECEMBER, 15)
+            val aaa = LocalDate.of(2025, 7, 13)
 
+            // --- ACTUALIZACIÓN: Se añade el campo 'recordatorioActivo' a cada entidad ---
             val testHorarios = listOf(
-                // Horarios para INF123 (asumiendo que INF123 ya existe)
+                // Horarios para INF123
                 HorarioEntity(
                     codigoCurso = "INF123",
                     fecha = aaa,
                     horaInicio = LocalTime.of(9, 0),
                     horaFin = LocalTime.of(10, 30),
                     tipo = "Clase",
-                    salon = "C101"
+                    salon = "C101",
+                    recordatorioActivo = false // Nuevo campo
                 ),
                 HorarioEntity(
                     codigoCurso = "INF123",
@@ -75,7 +94,8 @@ class HorarioViewModel @Inject constructor(
                     horaInicio = LocalTime.of(10, 45),
                     horaFin = LocalTime.of(12, 15),
                     tipo = "Laboratorio",
-                    salon = "V205"
+                    salon = "V205",
+                    recordatorioActivo = false // Nuevo campo
                 ),
                 HorarioEntity(
                     codigoCurso = "INF123",
@@ -83,7 +103,8 @@ class HorarioViewModel @Inject constructor(
                     horaInicio = LocalTime.of(14, 0),
                     horaFin = LocalTime.of(15, 30),
                     tipo = "Práctica",
-                    salon = "A301"
+                    salon = "A301",
+                    recordatorioActivo = false // Nuevo campo
                 ),
                 HorarioEntity(
                     codigoCurso = "INF123",
@@ -91,17 +112,19 @@ class HorarioViewModel @Inject constructor(
                     horaInicio = LocalTime.of(9, 0),
                     horaFin = LocalTime.of(11, 0),
                     tipo = "Examen",
-                    salon = "E202"
+                    salon = "E202",
+                    recordatorioActivo = true // Ejemplo de un recordatorio activado por defecto
                 ),
 
-                // Horarios para MAT201 (asumiendo que MAT201 ya existe)
+                // Horarios para MAT201
                 HorarioEntity(
                     codigoCurso = "MAT201",
                     fecha = today,
                     horaInicio = LocalTime.of(13, 0),
                     horaFin = LocalTime.of(14, 30),
                     tipo = "Clase",
-                    salon = "M203"
+                    salon = "M203",
+                    recordatorioActivo = false // Nuevo campo
                 ),
                 HorarioEntity(
                     codigoCurso = "MAT201",
@@ -109,7 +132,8 @@ class HorarioViewModel @Inject constructor(
                     horaInicio = LocalTime.of(10, 0),
                     horaFin = LocalTime.of(11, 30),
                     tipo = "Clase",
-                    salon = "B203"
+                    salon = "B203",
+                    recordatorioActivo = false // Nuevo campo
                 ),
                 HorarioEntity(
                     codigoCurso = "MAT201",
@@ -117,27 +141,21 @@ class HorarioViewModel @Inject constructor(
                     horaInicio = LocalTime.of(14, 0),
                     horaFin = LocalTime.of(16, 0),
                     tipo = "Práctica",
-                    salon = "B203"
+                    salon = "B203",
+                    recordatorioActivo = true // Ejemplo de un recordatorio activado por defecto
                 ),
-
-                // Puedes añadir más horarios para otros cursos si existen
-                // HorarioEntity(
-                //    codigoCurso = "BIO300", // Asegúrate de que BIO300 exista antes de insertar
-                //    fecha = today,
-                //    horaInicio = LocalTime.of(16, 0),
-                //    horaFin = LocalTime.of(17, 30),
-                //    tipo = "Clase",
-                //    salon = "Aula D401"
-                // ),
             )
 
-            //horarioRepository.insertarHorarios(testHorarios)
+            // Esta lógica previene que los horarios se inserten cada vez que el ViewModel se crea.
+            // Solo los insertará si la tabla de cursos ya tiene datos (lo cual es una buena señal
+            // de que la BD se ha inicializado).
             val cursos = cursoRepository.getCursos().first()
-            Log.d("HorarioViewModel", "Horarios de prueba insertados.")
             if (cursos.any { it.codigo == "INF123" }) {
+                // Descomenta la siguiente línea solo la primera vez o después de limpiar datos.
                 horarioRepository.insertarHorarios(testHorarios)
+                Log.d("HorarioViewModel", "Horarios de prueba insertados (o ya existen).")
             } else {
-                Log.w("HorarioViewModel", "No se insertaron horarios: cursos aún no creados.")
+                Log.w("HorarioViewModel", "No se insertaron horarios: cursos de prueba aún no creados.")
             }
         }
     }

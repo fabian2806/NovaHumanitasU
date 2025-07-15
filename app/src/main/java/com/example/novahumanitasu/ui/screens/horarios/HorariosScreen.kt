@@ -264,6 +264,7 @@ fun HorarioCard(horario: HorarioEntity, cursoNombre: String, timeFormatter: Date
         }
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun PreviewHorarioScreen() {

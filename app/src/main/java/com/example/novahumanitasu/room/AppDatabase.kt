@@ -12,7 +12,7 @@ import androidx.room.TypeConverters
 
 @Database(
     entities = [CursoEntity::class, UsuarioEntity::class, NotaEntity::class, HorarioEntity::class],
-    version = 5,
+    version = 6,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
