@@ -210,7 +210,9 @@ fun AnuncioCard(anuncio: DataAnuncio){
 @Composable
 fun CursoCard(curso: DataCurso, onClick: () -> Unit){
     Card(
-        modifier = Modifier.fillMaxWidth(), // <-- ¡SIN PADDING AQUÍ!
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() },
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(4.dp),
         colors = CardDefaults.cardColors(

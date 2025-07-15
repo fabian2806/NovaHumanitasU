@@ -56,9 +56,11 @@ fun CursosScreen(navController: NavController) {
                 .align(Alignment.CenterHorizontally)
         )
 
+
+
         LazyColumn(
             modifier = Modifier.fillMaxSize(), // Asegura que la lista ocupe el espacio disponible
-            contentPadding = PaddingValues(horizontal = 4.dp), // Añade el padding aquí
+            contentPadding = PaddingValues(horizontal = 1.dp), // Añade el padding aquí
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(cursos) { curso ->
@@ -74,6 +76,8 @@ fun CursosScreen(navController: NavController) {
                     })
             }
         }
+
+
 
     }
 }
