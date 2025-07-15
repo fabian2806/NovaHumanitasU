@@ -163,8 +163,20 @@ fun CalificacionesTab(codigo: String){
 }
 
 @Composable
-fun DocumentosTab(codigo: String){
-    Text("Documentos")
+fun DocumentosTab(codigo: String) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "📄 Aún no se han subido documentos para este curso.",
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.Center
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
