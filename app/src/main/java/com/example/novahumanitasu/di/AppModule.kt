@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import com.example.novahumanitasu.room.AppDatabase
 import com.example.novahumanitasu.room.CursoDao
+import com.example.novahumanitasu.room.HorarioDao
+import com.example.novahumanitasu.repository.HorarioRepository
 import com.example.novahumanitasu.room.NotaDao
 import com.example.novahumanitasu.room.ReservasDao
 import com.example.novahumanitasu.room.UsuarioDao
@@ -36,7 +38,18 @@ class AppModule {
 
     @Provides
     fun provideNotaDao(db: AppDatabase): NotaDao = db.notaDao()
-    
+
     @Provides
     fun provideReservasDao(db: AppDatabase): ReservasDao = db.reservasDao()
+
+    @Provides
+    fun provideHorarioDao(db: AppDatabase): HorarioDao = db.horarioDao()
+
+    @Provides
+    @Singleton
+    fun provideHorarioRepository(
+        horarioDao: HorarioDao
+    ): HorarioRepository {
+        return HorarioRepository(horarioDao)
+    }
 }

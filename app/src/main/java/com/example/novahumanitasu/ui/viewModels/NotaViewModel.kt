@@ -55,7 +55,15 @@ class NotaViewModel @Inject constructor(
                 NotaEntity("INF123", "EX2", 14)
             )
             repository.insertarNotas(notas)
-
+            val notasMat201 = listOf(
+                NotaEntity("MAT201", "PC1", 12),
+                NotaEntity("MAT201", "PC2", 18),
+                NotaEntity("MAT201", "PC3", 15),
+                NotaEntity("MAT201", "PC4", 9),
+                NotaEntity("MAT201", "EX1", 10),
+                NotaEntity("MAT201", "EX2", 16)
+            )
+            repository.insertarNotas(notasMat201)
         }
     }
 
