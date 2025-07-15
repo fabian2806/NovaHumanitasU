@@ -67,9 +67,6 @@ fun ReservaCubiculoScreen(
     }
 
     Scaffold(
-        bottomBar = {
-            BottomNavBar(selectedIndex = selectedIndex, onItemSelected = onNavSelected)
-        },
         topBar = {
             Box(modifier = Modifier.fillMaxWidth()) {
                 Icon(
