@@ -44,4 +44,8 @@ class HorarioRepository @Inject constructor(
     fun getHorariosActivosParaFecha(fecha: LocalDate): Flow<List<HorarioEntity>> {
         return horarioDao.getHorariosActivosPorFecha(fecha)
     }
+
+    suspend fun hayHorarios(): Boolean {
+        return horarioDao.contarHorarios() > 0
+    }
 }

@@ -35,4 +35,8 @@ interface HorarioDao {
     // NUEVO: Consulta para obtener horarios con recordatorio activo para una fecha específica
     @Query("SELECT * FROM horario WHERE fecha = :fecha AND recordatorioActivo = 1")
     fun getHorariosActivosPorFecha(fecha: LocalDate): Flow<List<HorarioEntity>>
+
+    // En tu archivo DAO para Horarios (Ej: HorarioDao.kt)
+    @Query("SELECT COUNT(*) FROM horario") // "horarios" es el nombre de tu tabla
+    suspend fun contarHorarios(): Int
 }

@@ -15,5 +15,7 @@ data class ReminderLogEntity(
     val horarioHoraInicio: LocalTime, // Usamos LocalTime directamente
     val reminderMessage: String, // El mensaje que se mostrará
     val reminderScheduledTime: LocalDateTime, // La hora y fecha exacta en que el recordatorio debería haber sido disparado (1 hora antes)
+    val horarioSalon: String,
+    val tipoActividad: String,
     @ColumnInfo(name = "timestamp_logged") val timestampLogged: LocalDateTime // Cuando se añadió este log
 )

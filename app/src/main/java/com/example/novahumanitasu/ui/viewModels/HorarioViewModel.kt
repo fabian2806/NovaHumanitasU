@@ -19,6 +19,8 @@ import java.time.LocalTime
 import javax.inject.Inject
 import java.time.Month // <--- Puedes importar java.time.Month para mayor legibilidad
 import kotlinx.coroutines.launch
+import com.example.novahumanitasu.R
+
 
 @HiltViewModel
 class HorarioViewModel @Inject constructor(
@@ -67,104 +69,105 @@ class HorarioViewModel @Inject constructor(
             Log.d("HorarioViewModel", "Recordatorio para ${horario.codigoCurso} a las ${horario.horaInicio} actualizado a: ${horarioActualizado.recordatorioActivo}")
         }
     }
+    // --- BLOQUE INIT MODIFICADO PARA CONTROLAR TODA LA CREACIÓN DE DATOS ---
     init {
         viewModelScope.launch {
-            // --- SOLO INSERTAR HORARIOS DE PRUEBA ---
-            val today = LocalDate.now()
-            val tomorrow = today.plusDays(1)
-            val dayAfterTomorrow = today.plusDays(2)
-            val fechaExamenFinal = LocalDate.of(2024, Month.DECEMBER, 15)
-            val aaa = LocalDate.of(2025, 7, 13)
+            // Comprobamos si ya existen cursos para evitar insertar datos duplicados.
+            // .first() toma el primer valor del Flow y cancela la recolección.
+            if (cursoRepository.getCursos().first().isEmpty()) {
+                Log.d("HorarioViewModel", "Base de datos vacía. Creando datos iniciales...")
 
-            // --- ACTUALIZACIÓN: Se añade el campo 'recordatorioActivo' a cada entidad ---
-            val testHorarios = listOf(
-                // Horarios para INF123
-                HorarioEntity(
-                    codigoCurso = "INF123",
-                    fecha = aaa,
-                    horaInicio = LocalTime.of(9, 0),
-                    horaFin = LocalTime.of(10, 30),
-                    tipo = "Clase",
-                    salon = "C101",
-                    recordatorioActivo = false // Nuevo campo
-                ),
-                HorarioEntity(
-                    codigoCurso = "INF123",
-                    fecha = today,
-                    horaInicio = LocalTime.of(9, 51),
-                    horaFin = LocalTime.of(10, 30),
-                    tipo = "Clase",
-                    salon = "C102",
-                    recordatorioActivo = true // Nuevo campo
-                ),
-                HorarioEntity(
-                    codigoCurso = "INF123",
-                    fecha = today,
-                    horaInicio = LocalTime.of(8, 47),
-                    horaFin = LocalTime.of(10, 30),
-                    tipo = "Laboratorio",
-                    salon = "V205",
-                    recordatorioActivo = true // Nuevo campo
-                ),
-                HorarioEntity(
-                    codigoCurso = "INF123",
-                    fecha = tomorrow,
-                    horaInicio = LocalTime.of(14, 0),
-                    horaFin = LocalTime.of(15, 30),
-                    tipo = "Práctica",
-                    salon = "A301",
-                    recordatorioActivo = false // Nuevo campo
-                ),
-                HorarioEntity(
-                    codigoCurso = "INF123",
-                    fecha = dayAfterTomorrow,
-                    horaInicio = LocalTime.of(9, 0),
-                    horaFin = LocalTime.of(11, 0),
-                    tipo = "Examen",
-                    salon = "E202",
-                    recordatorioActivo = true // Ejemplo de un recordatorio activado por defecto
-                ),
+                // --- PASO 1: CREAR LOS CURSOS PRIMERO ---
+                val cursosAInsertar = listOf(
+                    CursoEntity(
+                        codigo = "INF123",
+                        nombre = "Matemática I",
+                        profesor = "Kylian Mbappe",
+                        imagen = R.drawable.foto_clase_fgm
+                    ),
+                    CursoEntity(
+                        codigo = "MAT201",
+                        nombre = "Cálculo Diferencial",
+                        profesor = "Albert Einstein",
+                        imagen = R.drawable.foto_clase_fgm
+                    ),
+                    CursoEntity(
+                        codigo = "FIL123",
+                        nombre = "Filosofia",
+                        profesor = "Immanuel kant",
+                        imagen = R.drawable.foto_clase_fgm
+                    ),
+                    CursoEntity(
+                        codigo = "INF654",
+                        nombre = "Programacion 1",
+                        profesor = "Sam Altman",
+                        imagen = R.drawable.foto_clase_fgm
+                    )
+                )
+                // Insertamos todos los cursos. Podrías crear un método `insertarCursos` en el repo para esto.
+                cursosAInsertar.forEach { cursoRepository.insertarCurso(it) }
+                Log.d("HorarioViewModel", "Cursos de prueba insertados.")
 
-                // Horarios para MAT201
-                HorarioEntity(
-                    codigoCurso = "MAT201",
-                    fecha = today,
-                    horaInicio = LocalTime.of(8, 45),
-                    horaFin = LocalTime.of(11, 30),
-                    tipo = "Clase",
-                    salon = "M203",
-                    recordatorioActivo = true // Nuevo campo
-                ),
-                HorarioEntity(
-                    codigoCurso = "MAT201",
-                    fecha = tomorrow,
-                    horaInicio = LocalTime.of(10, 0),
-                    horaFin = LocalTime.of(11, 30),
-                    tipo = "Clase",
-                    salon = "B203",
-                    recordatorioActivo = false // Nuevo campo
-                ),
-                HorarioEntity(
-                    codigoCurso = "MAT201",
-                    fecha = fechaExamenFinal,
-                    horaInicio = LocalTime.of(14, 0),
-                    horaFin = LocalTime.of(16, 0),
-                    tipo = "Práctica",
-                    salon = "B203",
-                    recordatorioActivo = true // Ejemplo de un recordatorio activado por defecto
-                ),
-            )
 
-            // Esta lógica previene que los horarios se inserten cada vez que el ViewModel se crea.
-            // Solo los insertará si la tabla de cursos ya tiene datos (lo cual es una buena señal
-            // de que la BD se ha inicializado).
-            val cursos = cursoRepository.getCursos().first()
-            if (cursos.any { it.codigo == "INF123" ||  it.codigo == "MAT201"}) {
-                // Descomenta la siguiente línea solo la primera vez o después de limpiar datos.
-                horarioRepository.insertarHorarios(testHorarios)
-                Log.d("HorarioViewModel", "Horarios de prueba insertados (o ya existen).")
+
+                // --- TU LISTA COMPLETA DE HORARIOS ---
+                val horariosCompletos = listOf(
+                    // --- HORARIOS PARA INF123 ---
+                    HorarioEntity("INF123", LocalDate.of(2025, 7, 1), LocalTime.of(9, 0), LocalTime.of(11, 0), "Clase", "C101", false),
+                    HorarioEntity("INF123", LocalDate.of(2025, 7, 3), LocalTime.of(9, 0), LocalTime.of(11, 0), "Clase", "C101", false),
+                    HorarioEntity("INF123", LocalDate.of(2025, 7, 8), LocalTime.of(9, 0), LocalTime.of(11, 0), "Clase", "C101", false),
+                    HorarioEntity("INF123", LocalDate.of(2025, 7, 10), LocalTime.of(9, 0), LocalTime.of(11, 0), "Clase", "C101", false),
+                    HorarioEntity("INF123", LocalDate.of(2025, 7, 15), LocalTime.of(9, 0), LocalTime.of(11, 0), "Clase", "C101", false),
+                    HorarioEntity("INF123", LocalDate.of(2025, 7, 17), LocalTime.of(9, 0), LocalTime.of(11, 0), "Clase", "C101", false),
+                    HorarioEntity("INF123", LocalDate.of(2025, 7, 22), LocalTime.of(9, 0), LocalTime.of(11, 0), "Clase", "C101", false),
+                    HorarioEntity("INF123", LocalDate.of(2025, 7, 24), LocalTime.of(9, 0), LocalTime.of(11, 0), "Clase", "C101", false),
+                    HorarioEntity("INF123", LocalDate.of(2025, 7, 29), LocalTime.of(9, 0), LocalTime.of(11, 0), "Clase", "C101", false),
+                    HorarioEntity("INF123", LocalDate.of(2025, 7, 31), LocalTime.of(9, 0), LocalTime.of(11, 0), "Clase", "C101", false),
+                    HorarioEntity("INF123", LocalDate.of(2025, 7, 5), LocalTime.of(14, 0), LocalTime.of(16, 0), "Práctica", "L501", true),
+                    HorarioEntity("INF123", LocalDate.of(2025, 7, 19), LocalTime.of(14, 0), LocalTime.of(16, 0), "Práctica", "L501", true),
+                    // --- HORARIOS PARA MAT201 ---
+                    HorarioEntity("MAT201", LocalDate.of(2025, 7, 2), LocalTime.of(11, 0), LocalTime.of(13, 0), "Clase", "M205", false),
+                    HorarioEntity("MAT201", LocalDate.of(2025, 7, 4), LocalTime.of(11, 0), LocalTime.of(13, 0), "Clase", "M205", false),
+                    HorarioEntity("MAT201", LocalDate.of(2025, 7, 9), LocalTime.of(11, 0), LocalTime.of(13, 0), "Clase", "M205", false),
+                    HorarioEntity("MAT201", LocalDate.of(2025, 7, 11), LocalTime.of(11, 0), LocalTime.of(13, 0), "Clase", "M205", false),
+                    HorarioEntity("MAT201", LocalDate.of(2025, 7, 16), LocalTime.of(11, 0), LocalTime.of(13, 0), "Clase", "M205", false),
+                    HorarioEntity("MAT201", LocalDate.of(2025, 7, 18), LocalTime.of(11, 0), LocalTime.of(13, 0), "Clase", "M205", false),
+                    HorarioEntity("MAT201", LocalDate.of(2025, 7, 23), LocalTime.of(11, 0), LocalTime.of(13, 0), "Clase", "M205", false),
+                    HorarioEntity("MAT201", LocalDate.of(2025, 7, 25), LocalTime.of(11, 0), LocalTime.of(13, 0), "Clase", "M205", false),
+                    HorarioEntity("MAT201", LocalDate.of(2025, 7, 30), LocalTime.of(11, 0), LocalTime.of(13, 0), "Clase", "M205", false),
+                    HorarioEntity("MAT201", LocalDate.of(2025, 7, 10), LocalTime.of(16, 0), LocalTime.of(18, 0), "Práctica", "L502", true),
+                    HorarioEntity("MAT201", LocalDate.of(2025, 7, 24), LocalTime.of(16, 0), LocalTime.of(18, 0), "Práctica", "L502", true),
+                    // --- HORARIOS PARA INF654 ---
+                    HorarioEntity("INF654", LocalDate.of(2025, 7, 2), LocalTime.of(16, 0), LocalTime.of(18, 0), "Clase", "D404", false),
+                    HorarioEntity("INF654", LocalDate.of(2025, 7, 4), LocalTime.of(16, 0), LocalTime.of(18, 0), "Clase", "D404", false),
+                    HorarioEntity("INF654", LocalDate.of(2025, 7, 9), LocalTime.of(16, 0), LocalTime.of(18, 0), "Clase", "D404", false),
+                    HorarioEntity("INF654", LocalDate.of(2025, 7, 11), LocalTime.of(16, 0), LocalTime.of(18, 0), "Clase", "D404", false),
+                    HorarioEntity("INF654", LocalDate.of(2025, 7, 16), LocalTime.of(16, 0), LocalTime.of(18, 0), "Clase", "D404", false),
+                    HorarioEntity("INF654", LocalDate.of(2025, 7, 18), LocalTime.of(16, 0), LocalTime.of(18, 0), "Clase", "D404", false),
+                    HorarioEntity("INF654", LocalDate.of(2025, 7, 23), LocalTime.of(16, 0), LocalTime.of(18, 0), "Clase", "D404", false),
+                    HorarioEntity("INF654", LocalDate.of(2025, 7, 25), LocalTime.of(16, 0), LocalTime.of(18, 0), "Clase", "D404", false),
+                    HorarioEntity("INF654", LocalDate.of(2025, 7, 30), LocalTime.of(16, 0), LocalTime.of(18, 0), "Clase", "D404", false),
+                    HorarioEntity("INF654", LocalDate.of(2025, 7, 8), LocalTime.of(9, 0), LocalTime.of(11, 0), "Práctica", "L601", true),
+                    HorarioEntity("INF654", LocalDate.of(2025, 7, 22), LocalTime.of(9, 0), LocalTime.of(11, 0), "Práctica", "L601", true),
+                    // --- HORARIOS PARA FIL123 ---
+                    HorarioEntity("FIL123", LocalDate.of(2025, 7, 5), LocalTime.of(8, 0), LocalTime.of(10, 0), "Clase", "F112", false),
+                    HorarioEntity("FIL123", LocalDate.of(2025, 7, 12), LocalTime.of(8, 0), LocalTime.of(10, 0), "Clase", "F112", false),
+                    HorarioEntity("FIL123", LocalDate.of(2025, 7, 19), LocalTime.of(8, 0), LocalTime.of(10, 0), "Clase", "F112", false),
+                    HorarioEntity("FIL123", LocalDate.of(2025, 7, 26), LocalTime.of(8, 0), LocalTime.of(10, 0), "Clase", "F112", false),
+                    HorarioEntity("FIL123", LocalDate.of(2025, 7, 1), LocalTime.of(11, 0), LocalTime.of(13, 0), "Práctica", "L503", true),
+                    HorarioEntity("FIL123", LocalDate.of(2025, 7, 15), LocalTime.of(11, 0), LocalTime.of(13, 0), "Práctica", "L503", true),
+
+
+                    HorarioEntity("FIL123", LocalDate.of(2025, 8, 1), LocalTime.of(7, 0), LocalTime.of(10, 0), "Examen", "L503", true),
+                    HorarioEntity("INF654", LocalDate.of(2025, 8, 2), LocalTime.of(9, 0), LocalTime.of(12, 0), "Examen", "L503", true),
+                    HorarioEntity("FIL123", LocalDate.of(2025, 6, 1), LocalTime.of(11, 0), LocalTime.of(13, 0), "Clase", "L503", false),
+                )
+
+                horarioRepository.insertarHorarios(horariosCompletos)
+                Log.d("HorarioViewModel", "Horarios de prueba insertados.")
+
             } else {
-                Log.w("HorarioViewModel", "No se insertaron horarios: cursos de prueba aún no creados.")
+                Log.d("HorarioViewModel", "La base de datos ya contiene datos. No se insertan datos de prueba.")
             }
         }
     }

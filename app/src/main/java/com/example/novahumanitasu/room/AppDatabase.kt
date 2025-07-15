@@ -13,7 +13,7 @@ import com.example.novahumanitasu.model.entities.ReminderLogEntity
 
 @Database(
     entities = [CursoEntity::class, UsuarioEntity::class, NotaEntity::class, HorarioEntity::class, ReminderLogEntity::class],
-    version = 7,
+    version = 8,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

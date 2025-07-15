@@ -46,7 +46,7 @@ class ReminderWorker @AssistedInject constructor(
             val isWithinTriggerWindow = now.isAfter(reminderTriggerTime.minusMinutes(5)) && now.isBefore(classStartDateTime)
 
             if (isWithinTriggerWindow) {
-                val message = "¡Tu clase de ${horario.codigoCurso} (${horario.tipo}) en ${horario.salon} comienza a las ${horario.horaInicio} (en menos de 1 hora)!"
+                val message = "¡Tu ${horario.tipo} de ${horario.codigoCurso} en ${horario.salon} comienza a las ${horario.horaInicio} (en menos de 1 hora)!"
 
                 val reminderAlreadyLogged = reminderRepository.reminderExists(
                     horario.codigoCurso,
@@ -62,7 +62,9 @@ class ReminderWorker @AssistedInject constructor(
                         horarioHoraInicio = horario.horaInicio,
                         reminderMessage = message,
                         reminderScheduledTime = reminderTriggerTime,
-                        timestampLogged = LocalDateTime.now()
+                        timestampLogged = LocalDateTime.now(),
+                        horarioSalon = horario.salon,
+                        tipoActividad=horario.tipo
                     )
                     reminderRepository.addReminder(reminderLog)
                     Log.d("ReminderWorker", "Recordatorio LOGUEADO: $message")

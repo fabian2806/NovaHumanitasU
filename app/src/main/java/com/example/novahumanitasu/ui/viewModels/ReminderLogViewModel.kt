@@ -14,6 +14,10 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import android.util.Log
+import kotlinx.coroutines.flow.first
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 
 @HiltViewModel
 class ReminderLogViewModel @Inject constructor(
@@ -34,16 +38,42 @@ class ReminderLogViewModel @Inject constructor(
     val newReminderEvent: SharedFlow<ReminderLogEntity> = _newReminderEvent
 
     init {
-        // Observa cambios en la lista de todos los recordatorios.
-        // Cuando un nuevo recordatorio se añade, lo emitimos a través de newReminderEvent.
+        // --- NUEVA LÓGICA DE INSERCIÓN INICIAL ---
+        // Se ejecuta al crear el ViewModel. Ideal para poblar la base de datos con datos de prueba.
         viewModelScope.launch {
-            // firstOrNull() para el valor inicial, luego collect para escuchar cambios
+            // 1. Comprobamos si la tabla de recordatorios está vacía.
+            // .first() toma el primer valor emitido por el Flow y detiene la recolección.
+            if (reminderRepository.getAllReminders().first().isEmpty()) {
+                Log.d("ReminderLogViewModel", "La tabla 'reminder_logs' está vacía. Insertando dato de prueba.")
+
+                // 2. Creamos la entidad del recordatorio con los datos hardcodeados.
+                val testReminder = ReminderLogEntity(
+                    horarioCodigoCurso = "MAT201",
+                    horarioFecha = LocalDate.of(2025, 7, 11), // Año, Mes, Día
+                    horarioHoraInicio = LocalTime.of(16, 0), // Hora, Minuto
+                    reminderScheduledTime = LocalDateTime.of(2025, 7, 11, 15, 45), // Hora programada (ej. 15 min antes)
+                    reminderMessage = "Recordatorio para tu Practica de Cálculo Diferencial.",
+                    timestampLogged = LocalDateTime.now(), // Hora en que se creó el log
+                    horarioSalon = "L502",
+                    tipoActividad = "Practica"
+                )
+
+                // 3. Insertamos el recordatorio a través del repositorio.
+                reminderRepository.addReminder(testReminder)
+                Log.d("ReminderLogViewModel", "Recordatorio de prueba para MAT201 insertado.")
+            } else {
+                Log.d("ReminderLogViewModel", "La tabla 'reminder_logs' ya contiene datos. No se inserta nada.")
+            }
+        }
+
+        // --- Lógica existente para observar nuevos recordatorios ---
+        // Observa cambios en la lista de todos los recordatorios.
+        viewModelScope.launch {
             var lastEmittedReminder: ReminderLogEntity? = null
-            reminderRepository.getAllReminders().collect { reminders ->
+            allReminders.collect { reminders ->
                 val latestReminder = reminders.firstOrNull() // El más reciente por timestamp_logged DESC
 
                 if (latestReminder != null && latestReminder != lastEmittedReminder) {
-                    // Solo emitimos si es un recordatorio realmente nuevo o diferente al último emitido
                     _newReminderEvent.emit(latestReminder)
                     lastEmittedReminder = latestReminder
                     Log.d("ReminderLogViewModel", "Emitiendo nuevo evento de recordatorio: ${latestReminder.reminderMessage}")
