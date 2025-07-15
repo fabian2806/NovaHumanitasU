@@ -5,8 +5,10 @@ import androidx.room.TypeConverter
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.time.LocalDateTime
 
-object Converters { // 'object' para que sea un singleton
+
+object Converters {
 
     // Convertidor para LocalDate
     @TypeConverter
@@ -32,5 +34,18 @@ object Converters { // 'object' para que sea un singleton
     @JvmStatic
     fun toLocalTime(timeString: String?): LocalTime? {
         return timeString?.let { LocalTime.parse(it, DateTimeFormatter.ISO_LOCAL_TIME) }
+    }
+
+    @TypeConverter
+    @JvmStatic
+    fun fromLocalDateTime(dateTime: LocalDateTime?): String? {
+        // Usa un formato ISO que incluya fecha y hora para precisión
+        return dateTime?.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) // Formato "yyyy-MM-ddTHH:mm:ss"
+    }
+
+    @TypeConverter
+    @JvmStatic
+    fun toLocalDateTime(dateTimeString: String?): LocalDateTime? {
+        return dateTimeString?.let { LocalDateTime.parse(it, DateTimeFormatter.ISO_LOCAL_DATE_TIME) }
     }
 }

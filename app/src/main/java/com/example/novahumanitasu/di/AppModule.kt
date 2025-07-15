@@ -6,7 +6,9 @@ import com.example.novahumanitasu.room.AppDatabase
 import com.example.novahumanitasu.room.CursoDao
 import com.example.novahumanitasu.room.HorarioDao
 import com.example.novahumanitasu.repository.HorarioRepository
+import com.example.novahumanitasu.repository.ReminderRepository
 import com.example.novahumanitasu.room.NotaDao
+import com.example.novahumanitasu.room.ReminderDao
 import com.example.novahumanitasu.room.UsuarioDao
 import dagger.Module
 import dagger.Provides
@@ -44,11 +46,20 @@ class AppModule {
     @Provides
     @Singleton
     fun provideHorarioRepository(
-        horarioDao: HorarioDao // Hilt inyectará el HorarioDao provisto arriba
+        horarioDao: HorarioDao
     ): HorarioRepository {
         return HorarioRepository(horarioDao)
     }
 
+    @Provides
+    fun provideReminderDao(appDatabase: AppDatabase): ReminderDao {
+        return appDatabase.reminderDao()
+    }
 
+    @Provides
+    @Singleton
+    fun provideReminderRepository(reminderDao: ReminderDao): ReminderRepository {
+        return ReminderRepository(reminderDao)
+    }
 
 }

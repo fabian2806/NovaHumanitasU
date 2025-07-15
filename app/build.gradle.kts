@@ -72,4 +72,11 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+
+    implementation("androidx.work:work-runtime-ktx:2.10.2") // O la versión más reciente, actualmente 2.9.0-alpha02
+
+    // Hilt WorkManager Integration
+    implementation("androidx.hilt:hilt-work:1.2.0") // Esta te da HiltWorkerFactory y @HiltWorker
+    kapt("androidx.hilt:hilt-compiler:1.2.0")
 }

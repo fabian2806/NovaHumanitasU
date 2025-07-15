@@ -61,6 +61,7 @@ import com.example.novahumanitasu.components.CalendarOverlay
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.IconButton
+import androidx.compose.runtime.produceState
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -79,14 +80,15 @@ fun HorariosScreen(
     var selectedCourseCode by remember { mutableStateOf("Todos") } // "Todos" para ver todos los horarios, o un código de curso específico
 
     // Observar los horarios basados en la fecha y el curso seleccionado
-    val horarios by remember(selectedDate, selectedCourseCode) {
-        if (selectedCourseCode == "Todos") {
+    val horarios by produceState(initialValue = emptyList<HorarioEntity>(), selectedDate, selectedCourseCode) {
+        value = emptyList() // Limpia mientras espera
+        val flow = if (selectedCourseCode == "Todos") {
             horarioViewModel.getHorariosPorFecha(selectedDate)
         } else {
             horarioViewModel.getHorariosPorCursoYFecha(selectedCourseCode, selectedDate)
         }
-    }.collectAsState()
-
+        flow.collect { value = it }
+    }
     // Formateador para mostrar la fecha y hora
     val dateFormatter = remember { DateTimeFormatter.ofPattern("EEEE, d 'de' MMMM", Locale("es", "ES")) }
     val timeFormatter = remember { DateTimeFormatter.ofPattern("HH:mm") }

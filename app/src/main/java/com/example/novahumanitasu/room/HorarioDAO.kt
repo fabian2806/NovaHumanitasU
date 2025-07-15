@@ -31,4 +31,8 @@ interface HorarioDao {
 
     @Update
     suspend fun actualizarHorario(horario: HorarioEntity)
+
+    // NUEVO: Consulta para obtener horarios con recordatorio activo para una fecha específica
+    @Query("SELECT * FROM horario WHERE fecha = :fecha AND recordatorioActivo = 1")
+    fun getHorariosActivosPorFecha(fecha: LocalDate): Flow<List<HorarioEntity>>
 }

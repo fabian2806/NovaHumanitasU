@@ -91,11 +91,20 @@ class HorarioViewModel @Inject constructor(
                 HorarioEntity(
                     codigoCurso = "INF123",
                     fecha = today,
-                    horaInicio = LocalTime.of(10, 45),
-                    horaFin = LocalTime.of(12, 15),
+                    horaInicio = LocalTime.of(9, 51),
+                    horaFin = LocalTime.of(10, 30),
+                    tipo = "Clase",
+                    salon = "C102",
+                    recordatorioActivo = true // Nuevo campo
+                ),
+                HorarioEntity(
+                    codigoCurso = "INF123",
+                    fecha = today,
+                    horaInicio = LocalTime.of(8, 47),
+                    horaFin = LocalTime.of(10, 30),
                     tipo = "Laboratorio",
                     salon = "V205",
-                    recordatorioActivo = false // Nuevo campo
+                    recordatorioActivo = true // Nuevo campo
                 ),
                 HorarioEntity(
                     codigoCurso = "INF123",
@@ -120,11 +129,11 @@ class HorarioViewModel @Inject constructor(
                 HorarioEntity(
                     codigoCurso = "MAT201",
                     fecha = today,
-                    horaInicio = LocalTime.of(13, 0),
-                    horaFin = LocalTime.of(14, 30),
+                    horaInicio = LocalTime.of(8, 45),
+                    horaFin = LocalTime.of(11, 30),
                     tipo = "Clase",
                     salon = "M203",
-                    recordatorioActivo = false // Nuevo campo
+                    recordatorioActivo = true // Nuevo campo
                 ),
                 HorarioEntity(
                     codigoCurso = "MAT201",
@@ -150,7 +159,7 @@ class HorarioViewModel @Inject constructor(
             // Solo los insertará si la tabla de cursos ya tiene datos (lo cual es una buena señal
             // de que la BD se ha inicializado).
             val cursos = cursoRepository.getCursos().first()
-            if (cursos.any { it.codigo == "INF123" }) {
+            if (cursos.any { it.codigo == "INF123" ||  it.codigo == "MAT201"}) {
                 // Descomenta la siguiente línea solo la primera vez o después de limpiar datos.
                 horarioRepository.insertarHorarios(testHorarios)
                 Log.d("HorarioViewModel", "Horarios de prueba insertados (o ya existen).")
