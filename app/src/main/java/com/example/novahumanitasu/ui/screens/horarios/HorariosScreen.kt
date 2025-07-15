@@ -58,6 +58,9 @@ import androidx.compose.ui.graphics.graphicsLayer
 import com.example.novahumanitasu.components.DateCarousel
 import com.example.novahumanitasu.components.MonthNavigator
 import com.example.novahumanitasu.components.CalendarOverlay
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material3.IconButton
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -191,7 +194,7 @@ fun HorariosScreen(
                         val cursoNombre =
                             allCursos.find { it.codigo == horario.codigoCurso }?.nombre
                                 ?: horario.codigoCurso
-                        HorarioCard(horario, cursoNombre, timeFormatter)
+                        HorarioCard(horario, cursoNombre, timeFormatter, onToggleRecordatorio ={horarioViewModel.toggleRecordatorio(horario)})
                     }
                 }
             }
@@ -216,32 +219,63 @@ fun HorariosScreen(
 }
 
 @Composable
-fun HorarioCard(horario: HorarioEntity, cursoNombre: String, timeFormatter: DateTimeFormatter) {
+fun HorarioCard(
+    horario: HorarioEntity,
+    cursoNombre: String,
+    timeFormatter: DateTimeFormatter,
+    onToggleRecordatorio: () -> Unit // Nuevo parámetro para el callback
+) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        shape = MaterialTheme.shapes.large, // Bordes redondeados como en la imagen
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface) // Fondo blanco
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        shape = MaterialTheme.shapes.large,
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Column(
-            modifier = Modifier.padding(vertical = 16.dp, horizontal = 16.dp)
+            modifier = Modifier.padding(16.dp)
         ) {
-            // Título del curso (sin el icono)
-            Text(
-                text = cursoNombre,
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+            // Fila para el título y el icono de la campana
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically // Alinea el texto y el icono
+            ) {
+                // Título del curso
+                Text(
+                    text = cursoNombre,
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.weight(1f) // Para que no se salga si el texto es muy largo
+                )
 
-            // Tipo de clase (e.g., "Clase")
+                // Botón con el icono de la campana
+                IconButton(onClick = onToggleRecordatorio) {
+                    Icon(
+                        imageVector = if (horario.recordatorioActivo) {
+                            Icons.Filled.Notifications // Icono "lleno"
+                        } else {
+                            Icons.Outlined.Notifications // Icono "vacío"
+                        },
+                        contentDescription = if (horario.recordatorioActivo) "Desactivar recordatorio" else "Activar recordatorio",
+                        tint = if (horario.recordatorioActivo) {
+                            MaterialTheme.colorScheme.primary // Color azul cuando está activo
+                        } else {
+                            MaterialTheme.colorScheme.onSurfaceVariant // Color gris cuando está inactivo
+                        }
+                    )
+                }
+            }
+
+            // Tipo de clase (e.g., "Examen 1")
+            // Le damos un poco menos de espacio superior porque el título ya lo tiene
             Text(
                 text = horario.tipo,
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
-            Spacer(modifier = Modifier.height(6.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             // Fila inferior para la hora y el salón
             Row(
