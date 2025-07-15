@@ -34,15 +34,6 @@ fun OtrosScreen(
     Scaffold(
         topBar = {
             Box(modifier = Modifier.fillMaxWidth().padding(WindowInsets.statusBars.asPaddingValues())) {
-                Icon(
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = "Volver",
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .align(Alignment.CenterStart)
-                        .clickable { navController.popBackStack() },
-                    tint = MaterialTheme.colorScheme.primary
-                )
                 Text(
                     text = "Opciones",
                     fontWeight = FontWeight.Bold,
