@@ -66,6 +66,26 @@ class NotaViewModel @Inject constructor(
                 NotaEntity("MAT201", "EX2", 16)
             )
             repository.insertarNotas(notasMat201)
+
+            val otrasNotas = listOf(
+                NotaEntity("INF654", "PC1", 6),
+                NotaEntity("INF654", "PC2", 5),
+                NotaEntity("INF654", "PC3", 5),
+                NotaEntity("INF654", "PC4", 2),
+                NotaEntity("INF654", "EX1", 19),
+                NotaEntity("INF654", "EX2", 20)
+            )
+            repository.insertarNotas(otrasNotas)
+
+            val notas_fil = listOf(
+                NotaEntity("FIL123", "PC1", 11),
+                NotaEntity("FIL123", "PC2", 8),
+                NotaEntity("FIL123", "PC3", 15),
+                NotaEntity("FIL123", "PC4", 9),
+                NotaEntity("FIL123", "EX1", 12),
+                NotaEntity("FIL123", "EX2", 16)
+            )
+            repository.insertarNotas(notas_fil)
         }
     }
 

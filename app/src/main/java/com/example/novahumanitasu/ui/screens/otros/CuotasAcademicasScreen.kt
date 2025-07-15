@@ -39,6 +39,7 @@ fun CuotasAcademicasScreen(navController: NavController) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(WindowInsets.statusBars.asPaddingValues())
                     .padding(top = 12.dp, start = 8.dp, end = 8.dp, bottom = 8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -57,8 +58,8 @@ fun CuotasAcademicasScreen(navController: NavController) {
         LazyColumn(
             modifier = Modifier
                 .padding(padding)
-                .padding(horizontal = 12.dp, vertical = 8.dp)
-                .fillMaxSize(),
+                .fillMaxSize()
+                .padding(horizontal = 12.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(cuotas) { cuota ->

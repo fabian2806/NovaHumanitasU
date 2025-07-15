@@ -33,16 +33,7 @@ fun OtrosScreen(
     val context = LocalContext.current
     Scaffold(
         topBar = {
-            Box(modifier = Modifier.fillMaxWidth()) {
-                Icon(
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = "Volver",
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .align(Alignment.CenterStart)
-                        .clickable { navController.popBackStack() },
-                    tint = MaterialTheme.colorScheme.primary
-                )
+            Box(modifier = Modifier.fillMaxWidth().padding(WindowInsets.statusBars.asPaddingValues())) {
                 Text(
                     text = "Opciones",
                     fontWeight = FontWeight.Bold,
