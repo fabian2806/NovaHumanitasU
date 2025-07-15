@@ -8,6 +8,7 @@ import com.example.novahumanitasu.room.HorarioDao
 import com.example.novahumanitasu.repository.HorarioRepository
 import com.example.novahumanitasu.repository.ReminderRepository
 import com.example.novahumanitasu.room.NotaDao
+import com.example.novahumanitasu.room.ReservasDao
 import com.example.novahumanitasu.room.ReminderDao
 import com.example.novahumanitasu.room.UsuarioDao
 import dagger.Module
@@ -39,6 +40,9 @@ class AppModule {
 
     @Provides
     fun provideNotaDao(db: AppDatabase): NotaDao = db.notaDao()
+
+    @Provides
+    fun provideReservasDao(db: AppDatabase): ReservasDao = db.reservasDao()
 
     @Provides
     fun provideHorarioDao(db: AppDatabase): HorarioDao = db.horarioDao()

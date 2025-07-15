@@ -22,9 +22,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.novahumanitasu.ui.screens.cursos.CursosScreen
 import com.example.novahumanitasu.ui.screens.cursos.DetalleCursoScreen
+import com.example.novahumanitasu.ui.screens.otros.OtrosScreen
 import com.example.novahumanitasu.ui.screens.horarios.HorariosScreen
 import com.example.novahumanitasu.ui.screens.notificaciones.NotificacionesScreen
-
 
 @Composable
 fun HomeLayout(navController: NavController){
@@ -106,7 +106,7 @@ fun HomeLayout(navController: NavController){
 
             //5. Más:
             composable(BottomNavItem.More.route) {
-                HomeScreen(navController)
+                OtrosScreen(navController)
             }
         }
 
