@@ -40,11 +40,11 @@ class LoginViewModel @Inject constructor(
                     codigoNHU = "20210834",
                     nombres = "Fabián",
                     apellidos = "Montenegro",
-                    email = "asd", //fabianmr2806@hotmail.com
+                    email = "fabianmr2806@hotmail.com", //fabianmr2806@hotmail.com
                     carrera = "Ingeniería Informática",
                     ciclo = 2025,
                     dni = 78790021,
-                    password = "asd" //usuario123
+                    password = "usuario123" //usuario123
                 )
             )
         }
