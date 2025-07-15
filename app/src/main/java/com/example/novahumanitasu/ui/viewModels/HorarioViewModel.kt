@@ -1,7 +1,9 @@
 package com.example.novahumanitasu.ui.viewModels
 
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.novahumanitasu.model.entities.HorarioEntity
@@ -20,6 +22,7 @@ import javax.inject.Inject
 import java.time.Month // <--- Puedes importar java.time.Month para mayor legibilidad
 import kotlinx.coroutines.launch
 
+@RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class HorarioViewModel @Inject constructor(
     private val horarioRepository: HorarioRepository, // Inyecta el HorarioRepository
