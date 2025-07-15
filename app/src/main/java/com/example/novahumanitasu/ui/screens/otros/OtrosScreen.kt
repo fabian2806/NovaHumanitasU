@@ -33,7 +33,7 @@ fun OtrosScreen(
     val context = LocalContext.current
     Scaffold(
         topBar = {
-            Box(modifier = Modifier.fillMaxWidth()) {
+            Box(modifier = Modifier.fillMaxWidth().padding(WindowInsets.statusBars.asPaddingValues())) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
                     contentDescription = "Volver",
