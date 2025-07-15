@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -41,6 +42,7 @@ fun LoginScreen(navController: NavController){
 
     val loginViewModel: LoginViewModel = hiltViewModel()
     val usuarioAutenticado by loginViewModel.usuarioAutenticado.collectAsState()
+    val context = LocalContext.current
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -122,7 +124,7 @@ fun LoginScreen(navController: NavController){
             AppButton(
                 text = "Iniciar Sesión",
                 onClick = {
-                    loginViewModel.loginUsuario(email, password)
+                    loginViewModel.loginUsuario(email, password, context)
                 },
                 size = ButtonSize.LARGE
             )
